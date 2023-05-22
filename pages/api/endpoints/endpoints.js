@@ -5,6 +5,8 @@ const endpoints = {
     logout: "/api/logout",
     products: main+"/products",
     order: main+"/orders",
+    review: main+"/review",
+
     // add more endpoints here
 };
 

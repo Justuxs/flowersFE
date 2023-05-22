@@ -91,7 +91,7 @@ export default function AdminOrderScreen() {
                       <td className="p-5">
                         {order.createdAt}
                       </td>
-                      <td className="p-5">${order.totalPrice}</td>
+                      <td className="p-5">{order.totalPrice}€</td>
                       <td className="p-5">
                         {order.paymentMethod}
                       </td>

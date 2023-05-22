@@ -2,10 +2,11 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useReducer } from 'react';
+import {useEffect, useReducer, useState} from 'react';
 import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
 import endpoints from '@/pages/api/endpoints/endpoints';
+import AlertDialogSlide from "@/components/AlertDialogSlide";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -22,7 +23,7 @@ function reducer(state, action) {
 
 export default function OrderScreen({ id }) {
   const { data: session } = useSession();
-
+  const [reviewable ,setReviewable] = useState(false);
   const [
     { loading, error, order, loadingDeliver },
     dispatch
@@ -37,6 +38,7 @@ export default function OrderScreen({ id }) {
       dispatch({ type: 'FETCH_REQUEST' });
       const { data } = await axios.get(`${endpoints.order}/${id}`);
       console.log(data)
+      if(data.status.toLowerCase() ==="delivered") setReviewable(true);
       dispatch({ type: 'FETCH_SUCCESS', payload: data });
     } catch (err) {
       dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -48,7 +50,6 @@ export default function OrderScreen({ id }) {
   }, []);
 
   function changeStatusHandler(status) {
-    console.log("suveikiau")
     const fetchOrderStatus = async () => {
       try {
         await axios.post(`${endpoints.order}/${id}`, {
@@ -86,7 +87,7 @@ export default function OrderScreen({ id }) {
 
                         <div className="card  p-5">
                             <h2 className="mb-2 text-lg">Shipping Address</h2>
-                            <div className="alert-success">Address {order.shippingAddress}</div>
+                            <div className="alert-success">{order.shippingAddress}</div>
                         </div>
 
 
@@ -105,6 +106,7 @@ export default function OrderScreen({ id }) {
                                     <th className="    p-5 text-right">Quantity</th>
                                     <th className="  p-5 text-right">Price</th>
                                     <th className="p-5 text-right">Subtotal</th>
+                                  {reviewable && <th className="p-5 ">Review</th>}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -133,6 +135,16 @@ export default function OrderScreen({ id }) {
                                         <td className="p-5 text-right">
                                             ${item.quantity * item.price}
                                         </td>
+                                      {reviewable && <td className="p-5 text-right">
+                                        <AlertDialogSlide
+                                            orderID = {item.id}
+                                            productID = {item.product.id}
+                                            reviewer={order.customerName}
+                                            isActive = {item.review ==null}
+                                        >
+                                        </AlertDialogSlide>
+                                      </td>}
+
                                     </tr>
                                 ))}
                                 </tbody>
@@ -176,9 +188,11 @@ export default function OrderScreen({ id }) {
 
                                     </li>
                                 )}
+
                             </ul>
                         </div>
                     </div>
+
                 </div>
             )}
         </Layout>

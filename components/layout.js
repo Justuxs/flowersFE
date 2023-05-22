@@ -6,7 +6,6 @@ import {ToastContainer} from 'react-toastify';
 import {Menu} from '@headlessui/react';
 import 'react-toastify/dist/ReactToastify.css';
 import {Store} from '../utils/Store';
-import DropdownLink from './DropdownLink';
 
 export default function Layout({title, children}) {
     const {status, data: session} = useSession();
@@ -21,6 +20,11 @@ export default function Layout({title, children}) {
     const logoutClickHandler = () => {
         signOut({callbackUrl: '/#'});
     };
+
+    function DashbordClickHandler() {
+        window.location.href= "/admin/dashboard" ;
+    }
+
     return (
         <>
             <Head>
@@ -59,27 +63,14 @@ export default function Layout({title, children}) {
                                     </Menu.Button>
                                     <Menu.Items className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg ">
                                         <Menu.Item>
-                                            <DropdownLink className="dropdown-link" href="/profile">
-                                                Profile
-                                            </DropdownLink>
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            <DropdownLink
+                                            <a
                                                 className="dropdown-link"
-                                                href="/order-history"
-                                            >
-                                                Order History
-                                            </DropdownLink>
-                                        </Menu.Item>
-
-                                        <Menu.Item>
-                                            <DropdownLink
-                                                className="dropdown-link"
-                                                href="/admin/dashboard"
+                                                onClick={DashbordClickHandler}
                                             >
                                                 Admin Dashboard
-                                            </DropdownLink>
+                                            </a>
                                         </Menu.Item>
+
 
                                         <Menu.Item>
                                             <a
