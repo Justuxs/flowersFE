@@ -1,146 +1,178 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { Bar } from 'react-chartjs-2';
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import React, { useEffect, useReducer } from 'react';
+import React, {useEffect, useState} from 'react';
 import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
+import endpoints from "@/pages/api/endpoints/endpoints";
+import {Statistics} from "@/models/Statistics";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-  },
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, summary: action.payload, error: '' };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
-    default:
-      state;
-  }
-}
 function AdminDashboardScreen() {
-  const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
-    loading: true,
-    summary: { salesData: [] },
-    error: '',
-  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/summary`);
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
-      }
+    const request = new Statistics();
+
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [statistics, setStatistics] = useState(request);
+    const [interval, setInterval] = useState(1);
+
+
+    function setDate() {
+        request.startDate = new Date();
+        request.endDate = new Date()
+        const currentDate = new Date();
+        if(interval === 1){
+            request.startDate.setDate(currentDate.getDate() - 7);
+            document.getElementById('week-button').classList.add('selected-button');
+
+        }
+        if(interval === 2){
+            request.startDate.setDate(currentDate.getDate() - 30);
+            document.getElementById('month-button').classList.add('selected-button');
+
+        }
+        if(interval === 3){
+            request.endDate.setDate(currentDate.getDate() - 60);
+            request.startDate.setDate(currentDate.getDate() - 60);
+            document.getElementById('last-month-button').classList.add('selected-button');
+
+        }
+        if(interval === 4){
+            request.startDate.setDate(currentDate.getDate() - 365);
+            document.getElementById('year-button').classList.add('selected-button');
+        }
+
+    }
+
+    const getStatistics = async (startDate, endDate) => {
+        startDate = startDate.toISOString().split('T')[0];
+        endDate = endDate.toISOString().split('T')[0];
+
+        const params = {startDate};
+
+        if (endDate) {
+            params.endDate = endDate;
+        }
+
+        try {
+            const response = await axios.get(endpoints.statistics, {params});
+            const statistics = response.data;
+            setStatistics(statistics);
+        } catch (error) {
+            setError('Fetch FAILED');
+        }
     };
 
-    fetchData();
-  }, []);
 
-  const data = {
-    labels: summary.salesData.map((x) => x._id), // 2022/01 2022/03
-    datasets: [
-      {
-        label: 'Sales',
-        backgroundColor: 'rgba(162, 222, 208, 1)',
-        data: summary.salesData.map((x) => x.totalSales),
-      },
-    ],
-  };
-  return (
-    <Layout title="Admin Dashboard">
-      <div className="grid  md:grid-cols-4 md:gap-5">
-        <div>
-          <ul>
-            <li>
-              <Link href="/admin/dashboard" className="font-bold">
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/orders">Orders</Link>
-            </li>
-            <li>
-              <Link href="/admin/products">Products</Link>
-            </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
-            </li>
-          </ul>
-        </div>
-        <div className="md:col-span-3">
-          <h1 className="mb-4 text-xl">Admin Dashboard</h1>
-          {loading ? (
-            <div>Loading...</div>
-          ) : error ? (
-            <div className="alert-error">{error}</div>
-          ) : (
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-4">
-                <div className="card m-5 p-5">
-                  <p className="text-3xl">${summary.ordersPrice} </p>
-                  <p>Sales</p>
-                  <Link href="/admin/orders">View sales</Link>
+
+    useEffect(() => {
+        setLoading(true);
+        setDate();
+        getStatistics(request.startDate, request.endDate);
+        setLoading(false);
+
+    }, [interval]);
+
+
+        const changeDate = (number) => {
+            console.log("Suveike");
+        if(!(number === interval)){
+            switch (interval) {
+                case 1:
+                    document.getElementById('week-button').classList.remove('selected-button');
+                    break;
+                case 2:
+                    document.getElementById('month-button').classList.remove('selected-button');
+                    break;
+                case 3:
+                    document.getElementById('last-month-button').classList.remove('selected-button');
+                    break;
+                case 4:
+                    document.getElementById('year-button').classList.remove('selected-button');
+                    break;
+                default:
+                    break;
+            }
+
+            setInterval(number);
+        }
+    }
+
+    return (
+        <Layout title="Admin Dashboard">
+            <div className="grid  md:grid-cols-4 md:gap-5">
+                <div>
+                    <ul>
+                        <li>
+                            <Link href="/admin/dashboard" className="font-bold">
+                                Dashboard
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/admin/orders">Orders</Link>
+                        </li>
+                        <li>
+                            <Link href="/admin/products">Products</Link>
+                        </li>
+                        <li>
+                            <Link href="/admin/users">Users</Link>
+                        </li>
+                    </ul>
                 </div>
-                <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.ordersCount} </p>
-                  <p>Orders</p>
-                  <Link href="/admin/orders">View orders</Link>
+                <div className="md:col-span-3">
+                    <h1 className="mb-4 text-xl">Admin Dashboard</h1>
+                    {loading ? (
+                        <div>Loading...</div>
+                    ) : error ? (
+                        <div className="alert-error">{error}</div>
+                    ) : (
+                        <div className="grid md:grid-cols-4 md:gap-5">
+
+                            <div className="overflow-x-auto md:col-span-3">
+
+
+                                <div className="card  p-5">
+                                    <h2 className="mb-2 text-lg">Total orders</h2>
+                                    <div className="alert-inform">{statistics.orders_count}</div>
+                                </div>
+                                <div className="card  p-5">
+                                    <h2 className="mb-2 text-lg">Total turnover</h2>
+                                    <div className="alert-inform">{statistics.total_money} €</div>
+                                </div>
+                                <div className="card  p-5">
+                                    <h2 className="mb-2 text-lg">Orders that are still waiting</h2>
+                                    <div className="alert-error">{statistics.orders_waiting}</div>
+                                </div>
+                                <div className="card  p-5">
+                                    <h2 className="mb-2 text-lg">Orders that were executed</h2>
+                                    <div className="alert-success">{statistics.orders_delivered}</div>
+                                </div>
+
+
+                            </div>
+                            <div className="card  p-5">
+                                <h2 className="mb-2 text-lg text-center">Select time interval</h2>
+                                <button id="week-button" className="primary-button w-full px-2 py-2 mb-4" onClick={() => changeDate(1)} disabled={loading}>
+                                    Week
+                                </button>
+                                <button id="month-button" className="primary-button w-full px-2 py-2 mb-4" onClick={() => changeDate(2)} disabled={loading}>
+                                    Month
+                                </button>
+                                <button id="last-month-button" className="primary-button w-full px-2 py-2 mb-4" onClick={() => changeDate(3)} disabled={loading}>
+                                    Last month
+                                </button>
+                                <button id="year-button" className="primary-button w-full px-2 py-4" onClick={() => changeDate(4)} disabled={loading}>
+                                    Year
+                                </button>
+
+
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.productsCount} </p>
-                  <p>Products</p>
-                  <Link href="/admin/products">View products</Link>
-                </div>
-                <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.usersCount} </p>
-                  <p>Users</p>
-                  <Link href="/admin/users">View users</Link>
-                </div>
-              </div>
-              <h2 className="text-xl">Sales Report</h2>
-              <Bar
-                options={{
-                  legend: { display: true, position: 'right' },
-                }}
-                data={data}
-              />
             </div>
-          )}
-        </div>
-      </div>
-    </Layout>
-  );
+        </Layout>
+    );
 }
 
-AdminDashboardScreen.auth = { adminOnly: true };
 export default AdminDashboardScreen;

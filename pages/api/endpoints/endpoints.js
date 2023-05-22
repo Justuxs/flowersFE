@@ -6,6 +6,7 @@ const endpoints = {
     products: main+"/products",
     order: main+"/orders",
     review: main+"/review",
+    statistics: main+"/statistics"
 
     // add more endpoints here
 };
