@@ -4,9 +4,12 @@ import React, {useEffect, useState} from 'react';
 import Layout from '../../components/Layout';
 import endpoints from "@/pages/api/endpoints/endpoints";
 import {Statistics} from "@/models/Statistics";
+import {getSession} from "next-auth/react";
+import {useRouter} from "next/router";
 
 
 function AdminDashboardScreen() {
+    const router = useRouter();
 
     const request = new Statistics();
 
@@ -43,8 +46,21 @@ function AdminDashboardScreen() {
         }
 
     }
+     async function getToken() {
+        const session = await getSession();
+        const jwtToken = session?.jwtToken.email;
+        if (jwtToken === undefined) {
+            router.replace("/login");
+            return;
+        }
+        const token = {'Authorization': `Bearer ${jwtToken}`}
+        return token;
+    }
 
     const getStatistics = async (startDate, endDate) => {
+
+        const jwtToken = await getToken();
+
         startDate = startDate.toISOString().split('T')[0];
         endDate = endDate.toISOString().split('T')[0];
 
@@ -55,7 +71,7 @@ function AdminDashboardScreen() {
         }
 
         try {
-            const response = await axios.get(endpoints.statistics, {params});
+            const response = await axios.get(endpoints.statistics, {params, headers: jwtToken});
             const statistics = response.data;
             setStatistics(statistics);
         } catch (error) {
@@ -66,11 +82,16 @@ function AdminDashboardScreen() {
 
 
     useEffect(() => {
-        setLoading(true);
-        setDate();
-        getStatistics(request.startDate, request.endDate);
-        setLoading(false);
+        const fetchData = async () => {
 
+
+            setLoading(true);
+            setDate();
+            await getStatistics(request.startDate, request.endDate);
+            setLoading(false);
+        };
+
+        fetchData();
     }, [interval]);
 
 
@@ -79,7 +100,9 @@ function AdminDashboardScreen() {
         if(!(number === interval)){
             switch (interval) {
                 case 1:
-                    document.getElementById('week-button').classList.remove('selected-button');
+                    if( document.getElementById('week-button').classList.contains('selected-button')){
+                        document.getElementById('week-button').classList.remove('selected-button');
+                    }
                     break;
                 case 2:
                     document.getElementById('month-button').classList.remove('selected-button');
@@ -114,9 +137,7 @@ function AdminDashboardScreen() {
                         <li>
                             <Link href="/admin/products">Products</Link>
                         </li>
-                        <li>
-                            <Link href="/admin/users">Users</Link>
-                        </li>
+
                     </ul>
                 </div>
                 <div className="md:col-span-3">

@@ -7,6 +7,8 @@ import Layout from '../../components/Layout';
 import { getError } from '@/utils/error';
 import {getProducts} from "@/utils/data";
 import endpoints from "@/pages/api/endpoints/endpoints";
+import {getSession} from "next-auth/react";
+import {router} from "next/client";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -40,34 +42,29 @@ export default function AdminProdcutsScreen() {
 
 
   const [
-    { loading, error, products, loadingCreate, successDelete, loadingDelete },
+    { loading, error, products, successDelete, loadingDelete },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
     products: [],
     error: '',
   });
-
-  const createHandler = async () => {
-    if (!window.confirm('Are you sure?')) {
+  async function getToken() {
+    const session = await getSession();
+    const jwtToken = session?.jwtToken.email;
+    if (jwtToken === undefined) {
+      router.replace("/login");
       return;
     }
-    try {
-      dispatch({ type: 'CREATE_REQUEST' });
-      const { data } = await axios.post(`/api/admin/products`);
-      dispatch({ type: 'CREATE_SUCCESS' });
-      toast.success('Product created successfully');
-      router.push(`/admin/product/${data.product._id}`);
-    } catch (err) {
-      dispatch({ type: 'CREATE_FAIL' });
-      toast.error(getError(err));
-    }
-  };
+    const token = {'Authorization': `Bearer ${jwtToken}`}
+    return token;
+  }
   useEffect(() => {
     const fetchData = async () => {
+      const token = await getToken();
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        getProducts().then((data) => {
+        getProducts(token).then((data) => {
           dispatch({ type: 'FETCH_SUCCESS', payload: data });
         } )
 
@@ -89,8 +86,9 @@ export default function AdminProdcutsScreen() {
       return;
     }
     try {
+      const token = await getToken();
       dispatch({ type: 'DELETE_REQUEST' });
-      await axios.delete(`${endpoints.products}/${productId}`);
+      await axios.delete(`${endpoints.products}/${productId}`,   {headers: token});
       dispatch({ type: 'DELETE_SUCCESS' });
       toast.success('Product deleted successfully');
     } catch (err) {
@@ -98,7 +96,7 @@ export default function AdminProdcutsScreen() {
       toast.error(getError(err));
     }
   };
-  let create={id: "create"};
+
   return (
     <Layout title="Admin Products">
       <div className="grid md:grid-cols-4 md:gap-5">
@@ -115,9 +113,7 @@ export default function AdminProdcutsScreen() {
                 Products
               </Link>
             </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
-            </li>
+
           </ul>
         </div>
         <div className="overflow-x-auto md:col-span-3">

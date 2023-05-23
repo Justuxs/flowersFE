@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import {getSession, signIn, useSession} from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { getError } from '../utils/error';
@@ -25,9 +25,8 @@ export default function LoginScreen() {
     } = useForm();
 
     const submitHandler = async ({ email, password }) => {
-
         try {
-            const result = await signIn('credentials', {
+            const result = await signIn("credentials", {
                 redirect: false,
                 email,
                 password,
@@ -35,6 +34,13 @@ export default function LoginScreen() {
 
             if (result.error) {
                 toast.error(result.error);
+            } else {
+                // Retrieve the session to access the token
+                const session = await getSession();
+                const token = session?.jwtToken;
+
+                // Print the token
+                console.log("Token:", token);
             }
         } catch (err) {
             toast.error(getError(err));

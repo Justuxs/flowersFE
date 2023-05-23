@@ -84,16 +84,26 @@ let data = {
 
 export default data;
 
-export async function getProducts() {
-    const res = await fetch('http://localhost:8080/products');
+export async function getProducts(token) {
+    const res = await fetch('http://localhost:8080/products', {
+        headers: {
+            'Content-Type': 'application/json',
+            token,
+        },
+    });
     const response = await res.json();
     response.forEach((product) => {
        product.image = "/images/roze.jpg";
     });
     return response
 }
-export async function getProduct(id) {
-    const res = await fetch('http://localhost:8080/products/'+id);
+export async function getProduct(id,token) {
+    const res = await fetch('http://localhost:8080/products/'+id,{
+        headers: {
+            'Content-Type': 'application/json',
+            token,
+        },
+    });
     if (!res.ok) {
         return null;
     }

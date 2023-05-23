@@ -4,6 +4,8 @@ import React, { useEffect, useReducer } from 'react';
 import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
 import endpoints from "@/pages/api/endpoints/endpoints";
+import {getSession} from "next-auth/react";
+import {router} from "next/client";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -25,12 +27,24 @@ export default function AdminOrderScreen() {
     error: '',
   });
 
+  async function getToken() {
+    const session = await getSession();
+    const jwtToken = session?.jwtToken.email;
+    if (jwtToken === undefined) {
+      router.replace("/login");
+      return;
+    }
+    const token = {'Authorization': `Bearer ${jwtToken}`}
+    return token;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
+      const jwtToken = await getToken();
 
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(endpoints.order);
+        const { data } = await axios.get(endpoints.order,   {headers: jwtToken});
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
@@ -55,9 +69,7 @@ export default function AdminOrderScreen() {
             <li>
               <Link href="/admin/products">Products</Link>
             </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
-            </li>
+
           </ul>
         </div>
         <div className="overflow-x-auto md:col-span-3">

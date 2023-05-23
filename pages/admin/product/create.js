@@ -1,32 +1,32 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import React, {useReducer} from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import {useForm} from 'react-hook-form';
+import {toast} from 'react-toastify';
 import Layout from '../../../components/Layout';
-import { getError } from '../../../utils/error';
+import {getError} from '../../../utils/error';
 import endpoints from "@/pages/api/endpoints/endpoints";
 
 function reducer(state, action) {
 
     switch (action.type) {
         case 'FETCH_REQUEST':
-            return { ...state, loading: true, error: '' };
+            return {...state, loading: true, error: ''};
         case 'FETCH_SUCCESS':
-            return { ...state, loading: false, error: '' };
+            return {...state, loading: false, error: ''};
         case 'FETCH_FAIL':
-            return { ...state, loading: false, error: action.payload };
+            return {...state, loading: false, error: action.payload};
 
         case 'UPDATE_REQUEST':
-            return { ...state, loadingUpdate: true, errorUpdate: '' };
+            return {...state, loadingUpdate: true, errorUpdate: ''};
         case 'UPDATE_SUCCESS':
-            return { ...state, loadingUpdate: false, errorUpdate: '' };
+            return {...state, loadingUpdate: false, errorUpdate: ''};
         case 'UPDATE_FAIL':
-            return { ...state, loadingUpdate: false, errorUpdate: action.payload };
+            return {...state, loadingUpdate: false, errorUpdate: action.payload};
 
         case 'UPLOAD_REQUEST':
-            return { ...state, loadingUpload: true, errorUpload: '' };
+            return {...state, loadingUpload: true, errorUpload: ''};
         case 'UPLOAD_SUCCESS':
             return {
                 ...state,
@@ -34,15 +34,16 @@ function reducer(state, action) {
                 errorUpload: '',
             };
         case 'UPLOAD_FAIL':
-            return { ...state, loadingUpload: false, errorUpload: action.payload };
+            return {...state, loadingUpload: false, errorUpload: action.payload};
 
         default:
             return state;
     }
 }
+
 export default function AdminProductCreateScreen() {
 
-    const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
+    const [{loading, error, loadingUpdate, loadingUpload}, dispatch] =
         useReducer(reducer, {
             loading: false,
             error: '',
@@ -51,9 +52,8 @@ export default function AdminProductCreateScreen() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm();
-
 
 
     const router = useRouter();
@@ -61,6 +61,17 @@ export default function AdminProductCreateScreen() {
     const uploadHandler = async (e, imageField = 'image') => {
 
     };
+
+    async function getToken() {
+        const session = await getSession();
+        const jwtToken = session?.jwtToken.email;
+        if (jwtToken === undefined) {
+            router.replace("/login");
+            return;
+        }
+        const token = {'Authorization': `Bearer ${jwtToken}`}
+        return token;
+    }
 
     const submitHandler = async ({
                                      name,
@@ -70,25 +81,30 @@ export default function AdminProductCreateScreen() {
                                      image, quantity,
                                      description,
                                  }) => {
-        dispatch({ type: 'UPDATE_REQUEST' });
+        dispatch({type: 'UPDATE_REQUEST'});
+        const token = await getToken();
 
         try {
-                await axios.post(`${endpoints.products}`, {
-                    name,
-                    id,
-                    price,
-                    category,
-                    image,
-                    quantity,
-                    description,
-                });
+            await axios.post(`${endpoints.products}`, {
+                name,
+                id,
+                price,
+                category,
+                image,
+                quantity,
+                description,
+            }, {
+                headers: {
+                    token
+                }
+            });
 
 
-            dispatch({ type: 'UPDATE_SUCCESS' });
+            dispatch({type: 'UPDATE_SUCCESS'});
             toast.success('Product updated successfully');
             router.push('/admin/products');
         } catch (err) {
-            dispatch({ type: 'UPDATE_FAIL', payload: getError(err) });
+            dispatch({type: 'UPDATE_FAIL', payload: getError(err)});
             toast.error(getError(err));
         }
     };
