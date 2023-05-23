@@ -12,3 +12,4 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Start chrome without security -> "vieta\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=~/chromeTemp
