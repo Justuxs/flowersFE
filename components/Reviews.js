@@ -2,13 +2,13 @@ import React from 'react';
 
 const Reviews = ({ reviews }) => {
     return (
-        <div className="flex flex-wrap gap-4">
+        <div >
             {reviews.map((review) => (
-                <div
+                <div className="card bg-amber-50 p-5"
                     key={review.id}
-                    className="bg-yellow-200 p-4 rounded-lg break-all flex-shrink-0 w-64"
                 >
-                    <p className="text-lg font-bold">Comment: {review.comment}</p>
+                    <p className="text-xl font-bold whitespace-pre-line"> {review.comment}</p>
+
                     <p>Rate: {review.rate}</p>
                     <p>Reviewer: {review.reviewerName}</p>
                 </div>

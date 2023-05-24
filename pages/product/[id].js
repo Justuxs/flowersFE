@@ -27,7 +27,7 @@ export default function ProductScreen({page}) {
         const quantity = existItem ? existItem.quantity + 1 : 1;
 
         if (product.quantity < quantity) {
-            alert('Sorry. Product is out of stock');
+            alert('Sorry. Product is out of stock or your cart has max quantity');
             return;
         }
         dispatch({ type: 'CART_ADD_ITEM', payload: {...product,quantity}})
@@ -82,15 +82,18 @@ export default function ProductScreen({page}) {
                         <button className="primary-button w-full" onClick={addToCartHandler}>Add to cart</button>
                     </div>
                 </div>
+                    {product.reviews.length > 0 ? (
+                        <div className="col-span-full p-5 alert-inform card overflow-x-auto">
+                            <h1 className="text-2xl font-bold ">Reviews</h1>
+                            <Reviews reviews={product.reviews} />
+                        </div>
+                    ) : (
+                        <div className="col-span-full p-5 alert-inform card overflow-x-auto">
+                            <h1 className="text-2xl font-bold text-yellow-600">No reviews yet</h1>
+                            <h1 className="text-xl">Order now and be the first</h1>
+                        </div>
+                    )}
 
-                {product.reviews.length >0 ?                 <div>
-                    <h1 className="text-2xl font-bold text-yellow-500">Reviews</h1>
-                    <Reviews reviews={product.reviews} />
-                </div>:<div>
-                    <h1 className="text-2xl font-bold text-yellow-500">No reviews :(</h1>
-                    <h1 className="text-xl font-bold text-yellow-500">Order now and be first</h1>
-                </div>
-                }
 
 
             </div>}

@@ -91,6 +91,9 @@ export async function getProducts(token) {
             token,
         },
     });
+    if (!res.ok) {
+        return null;
+    }
     const response = await res.json();
     response.forEach((product) => {
        product.image = "/images/roze.jpg";

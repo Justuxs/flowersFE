@@ -27,8 +27,11 @@ function CartScreen() {
         } else {
             let qty = input.value;
             let store_item = store_items.find(store_item => store_item.id === item.id);
-
-            if (store_item.maxQuantity < qty) {
+            if (1 > qty) {
+                input.value = 1
+                toast.error("Quantity is too");
+            }
+            else if (store_item.maxQuantity < qty) {
                 input.value = store_item.maxQuantity
                 toast.error("Max quantity : " + store_item.maxQuantity);
             } else {
@@ -105,14 +108,18 @@ function CartScreen() {
                                             type="number"
                                             id="quantity"
                                             value={item.quantity}
-                                            onChange={(e) =>
-                                                updateCartHandler(item, e.target,false)
-                                            }
-                                            onBlur={(e) =>
-                                                updateCartHandler(item, e.target,true)
-                                            }
-
-
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^[1-9][0-9]*$/.test(value) || value === '') {
+                                                    updateCartHandler(item, e.target, false);
+                                                }
+                                            }}
+                                            onBlur={(e) => {
+                                                const value = e.target.value;
+                                                if (/^[1-9][0-9]*$/.test(value) || value === '') {
+                                                    updateCartHandler(item, e.target, true);
+                                                }
+                                            }}
                                         />
 
                                     </td>
