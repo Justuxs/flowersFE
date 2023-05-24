@@ -5,6 +5,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import Layout from '../../components/Layout';
 import {getProduct} from '../../utils/data';
 import {Store} from "@/utils/Store";
+import Reviews from "@/components/Reviews";
 
 export default function ProductScreen({page}) {
 
@@ -81,6 +82,17 @@ export default function ProductScreen({page}) {
                         <button className="primary-button w-full" onClick={addToCartHandler}>Add to cart</button>
                     </div>
                 </div>
+
+                {product.reviews.length >0 ?                 <div>
+                    <h1 className="text-2xl font-bold text-yellow-500">Reviews</h1>
+                    <Reviews reviews={product.reviews} />
+                </div>:<div>
+                    <h1 className="text-2xl font-bold text-yellow-500">No reviews :(</h1>
+                    <h1 className="text-xl font-bold text-yellow-500">Order now and be first</h1>
+                </div>
+                }
+
+
             </div>}
         </Layout>
     );

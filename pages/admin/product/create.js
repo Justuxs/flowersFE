@@ -7,6 +7,7 @@ import {toast} from 'react-toastify';
 import Layout from '../../../components/Layout';
 import {getError} from '../../../utils/error';
 import endpoints from "@/pages/api/endpoints/endpoints";
+import {getSession} from "next-auth/react";
 
 function reducer(state, action) {
 
@@ -58,7 +59,7 @@ export default function AdminProductCreateScreen() {
 
     const router = useRouter();
 
-    const uploadHandler = async (e, imageField = 'image') => {
+    const uploadHandler = async (e) => {
 
     };
 
@@ -94,9 +95,7 @@ export default function AdminProductCreateScreen() {
                 quantity,
                 description,
             }, {
-                headers: {
-                    token
-                }
+                headers: token
             });
 
 
@@ -124,9 +123,6 @@ export default function AdminProductCreateScreen() {
                             <Link href="/admin/products" className="font-bold">
                                 Products
                             </Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/users">Users</Link>
                         </li>
                     </ul>
                 </div>
@@ -174,7 +170,7 @@ export default function AdminProductCreateScreen() {
                                 )}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="image">image</label>
+                                <label htmlFor="image">Image</label>
                                 <input
                                     type="text"
                                     className="w-full"
@@ -231,7 +227,7 @@ export default function AdminProductCreateScreen() {
                                 )}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="quantity">description</label>
+                                <label htmlFor="quantity">Description</label>
                                 <input
                                     type="text"
                                     className="w-full"

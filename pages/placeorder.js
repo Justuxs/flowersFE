@@ -82,11 +82,20 @@ export default function PlaceOrderScreen() {
                 <div className="grid md:grid-cols-4 md:gap-5">
                     <div className="overflow-x-auto md:col-span-3">
                         <div className="card  p-5">
+                            <h2 className="mb-2 text-lg">Contacts</h2>
+                            <div>
+                                Full name: {shippingAddress.fullName},
+                                Phone: +{shippingAddress.phoneNumber}, Email: {shippingAddress.email}
+                            </div>
+                            <div>
+                                <Link legacyBehavior href="/shipping">Edit</Link>
+                            </div>
+                        </div>
+                        <div className="card  p-5">
                             <h2 className="mb-2 text-lg">Shipping Address</h2>
                             <div>
-                                {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                                {shippingAddress.city}, {shippingAddress.postalCode},{' '}
-                                {shippingAddress.phoneNumber}
+                                {shippingAddress.address},{' '}
+                                {shippingAddress.city}, {shippingAddress.postalCode}
                             </div>
                             <div>
                                 <Link legacyBehavior href="/shipping">Edit</Link>

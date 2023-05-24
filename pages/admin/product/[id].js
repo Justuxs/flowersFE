@@ -144,9 +144,7 @@ export default function AdminProductEditScreen() {
                                 Products
                             </Link>
                         </li>
-                        <li>
-                            <Link href="/admin/users">Users</Link>
-                        </li>
+
                     </ul>
                 </div>
                 <div className="md:col-span-3">
@@ -193,7 +191,7 @@ export default function AdminProductEditScreen() {
                                 )}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="image">image</label>
+                                <label htmlFor="image">Image</label>
                                 <input
                                     type="text"
                                     className="w-full"
@@ -250,7 +248,7 @@ export default function AdminProductEditScreen() {
                                 )}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="quantity">description</label>
+                                <label htmlFor="quantity">Description</label>
                                 <input
                                     type="text"
                                     className="w-full"

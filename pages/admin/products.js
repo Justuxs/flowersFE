@@ -1,14 +1,13 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
 import { getError } from '@/utils/error';
 import {getProducts} from "@/utils/data";
 import endpoints from "@/pages/api/endpoints/endpoints";
 import {getSession} from "next-auth/react";
-import {router} from "next/client";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -184,4 +183,3 @@ export default function AdminProdcutsScreen() {
   );
 }
 
-AdminProdcutsScreen.auth = { adminOnly: true };
