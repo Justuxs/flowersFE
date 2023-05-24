@@ -85,7 +85,7 @@ export default function PlaceOrderScreen() {
                             <h2 className="mb-2 text-lg">Contacts</h2>
                             <div>
                                 Full name: {shippingAddress.fullName},
-                                Phone: +{shippingAddress.phoneNumber}, Email: {shippingAddress.email}
+                                Phone: {shippingAddress.phoneNumber}, Email: {shippingAddress.email}
                             </div>
                             <div>
                                 <Link legacyBehavior href="/shipping">Edit</Link>

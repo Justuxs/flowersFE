@@ -122,8 +122,8 @@ export default function ShippingScreen() {
                         {...register('phoneNumber', {
                             required: 'Please enter phone number',
                             pattern: {
-                                value: /^[0-9]{10}$/i, // regex for 10-digit phone number
-                                message: 'Please enter a valid phone number',
+                                value: /^\+?[0-9]{10}$/i, // regex for 10-digit phone number
+                                message: 'Please enter a valid phone number like +3701234567',
                             },
                         })}
                     />
