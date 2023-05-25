@@ -95,9 +95,7 @@ export async function getProducts(token) {
         return null;
     }
     const response = await res.json();
-    response.forEach((product) => {
-       product.image = "/images/roze.jpg";
-    });
+   // response.forEach((product) => {product.image = "/images/roze.jpg";});
     return response
 }
 export async function getProduct(id,token) {
@@ -111,7 +109,7 @@ export async function getProduct(id,token) {
         return null;
     }
     const response = await res.json();
-    response.image = "/images/roze.jpg";
+    //response.image = "/images/roze.jpg";
     const product = new Product(
         response.id,
         response.category,
@@ -120,7 +118,7 @@ export async function getProduct(id,token) {
         response.description,
         response.price,
         response.quantity,
-        "/images/roze.jpg"
+        response.image
     );
     return product
 }

@@ -10,7 +10,7 @@ export default function ProductItem({product}) {
         <div className="card">
             <Link legacyBehavior href={`/product/${product.id}`}>
                 <a>
-                    <img className="rounded shadow" src={product.image} alt={product.name}/>
+                    <img className="rounded shadow product-image" src={product.image} alt={product.name}/>
                 </a>
             </Link>
 

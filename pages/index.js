@@ -2,6 +2,8 @@ import Layout from '../components/Layout';
 import ProductItem from '../components/ProductItem';
 import {useEffect, useState} from "react";
 import {getProducts} from "@/utils/data";
+import CarouselComponent from "@/components/CarouselComponent";
+import CarouselBig from "@/components/CarouselBig";
 
 
 
@@ -17,11 +19,33 @@ export default function Home() {
     return (
         <Layout title="Home Page">
             {Array.isArray(data) && data.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                    {data.map((product) => (
-                        <ProductItem product={product} key={product.id}></ProductItem>
-                    ))}
-                </div>
+                <CarouselComponent items={data.map((product) => (
+                    <ProductItem product={product} key={product.id}></ProductItem>
+                ))} />
+            ) : (
+                <p>Loading products...</p>
+            )}
+            <h1 className="text-4xl font-bold p-1 ">Gėlės</h1>
+            {Array.isArray(data) && data.length > 0 ? (
+                <CarouselBig items={data.map((product) => (
+                    <ProductItem product={product} key={product.id}></ProductItem>
+                ))} />
+            ) : (
+                <p>Loading products...</p>
+            )}
+            <h1 className="text-4xl font-bold p-1 ">Puokštės</h1>
+            {Array.isArray(data) && data.length > 0 ? (
+                <CarouselBig items={data.map((product) => (
+                    <ProductItem product={product} key={product.id}></ProductItem>
+                ))} />
+            ) : (
+                <p>Loading products...</p>
+            )}
+            <h1 className="text-4xl font-bold p-1 ">Gyvos gėlės</h1>
+            {Array.isArray(data) && data.length > 0 ? (
+                <CarouselBig items={data.map((product) => (
+                    <ProductItem product={product} key={product.id}></ProductItem>
+                ))} />
             ) : (
                 <p>Loading products...</p>
             )}

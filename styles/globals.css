@@ -62,3 +62,9 @@ textarea {
 .alert-inform {
   @apply my-3 rounded-lg bg-yellow-100 p-3 text-yellow-700;
 }
+.product-image {
+  width: 400px; /* Adjust the width to your desired size */
+  height: 400px; /* Adjust the height to your desired size */
+  object-fit: cover; /* Preserve the aspect ratio and cover the entire space */
+}
+
