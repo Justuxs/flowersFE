@@ -13,17 +13,22 @@ body {
 a {
   @apply text-blue-600 hover:text-blue-800;
 }
-
+.bg-white {
+  background-color: white;
+}
 * {
   box-sizing: border-box;
 }
 
 .card {
   @apply mb-5  block   rounded-lg border border-gray-200  shadow-md;
+  background-color: white;
+
 }
 
 .primary-button {
   @apply rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400  active:bg-amber-500;
+
 }
 .selected-button{
   @apply rounded bg-amber-500 py-2 px-4 shadow outline-none;
@@ -53,14 +58,20 @@ textarea {
 
 .alert-error {
   @apply my-3 rounded-lg bg-red-100 p-3 text-red-700;
+
 }
 
 .alert-success {
   @apply my-3 rounded-lg bg-green-100 p-3 text-green-700;
+
 }
 
 .alert-inform {
   @apply my-3 rounded-lg bg-yellow-100 p-3 text-yellow-700;
+
+}
+table{
+  background-color: white;
 }
 .product-image {
   width: 400px; /* Adjust the width to your desired size */

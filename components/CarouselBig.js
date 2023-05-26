@@ -26,8 +26,7 @@ const CarouselBig = ({ items }) => {
                         {items
                             .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
                             .map((item) => (
-                                <div key={item.key} className="mx-auto">
-                                    {console.log(item.props.product)}
+                                <div key={item.key} className="mx-auto p-4">
                                     <ProductItem product={item.props.product} />
                                 </div>
                             ))}

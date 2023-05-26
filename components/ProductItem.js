@@ -7,7 +7,7 @@ export default function ProductItem({product}) {
 
 
     return (
-        <div className="card">
+        <div className="card bg-white">
             <Link legacyBehavior href={`/product/${product.id}`}>
                 <a>
                     <img className="rounded shadow product-image" src={product.image} alt={product.name}/>

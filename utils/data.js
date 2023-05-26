@@ -84,6 +84,8 @@ let data = {
 
 export default data;
 
+
+
 export async function getProducts(token) {
     const res = await fetch('http://localhost:8080/products', {
         headers: {
