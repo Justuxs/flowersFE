@@ -114,7 +114,7 @@ export default function OrderScreen({ id }) {
                                     <tr key={item.id} className="border-b">
                                         <td>
                                             <Link
-                                                href={`/product/${item.id}`}
+                                                href={`/product/${item.product.id}`}
                                                 className="flex items-center"
                                             >
                                                 <Image

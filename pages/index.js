@@ -1,7 +1,6 @@
 import Layout from '../components/Layout';
 import ProductItem from '../components/ProductItem';
 import {useEffect, useState} from "react";
-import {getProducts} from "@/utils/data";
 import CarouselComponent from "@/components/CarouselComponent";
 import CarouselBig from "@/components/CarouselBig";
 import axios from "axios";
@@ -56,7 +55,7 @@ export default function Home() {
             )}
             {Array.isArray(data1) && data1.length > 0 ? (
                 <div>
-                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">Gėlės</h1>
+                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">FLowers</h1>
                     <CarouselBig items={data1.map((product) => (
                     <ProductItem product={product} key={product.id}></ProductItem>
                 ))} />
@@ -66,7 +65,7 @@ export default function Home() {
             )}
             {Array.isArray(data2) && data2.length > 0 ? (
                 <div>
-                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">Gyvos geles</h1>
+                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">Live flowers</h1>
                     <CarouselBig items={data2.map((product) => (
                     <ProductItem product={product} key={product.id}></ProductItem>
                 ))} />
@@ -77,7 +76,7 @@ export default function Home() {
             {Array.isArray(data3) && data3.length > 0 ? (
 
                 <div>
-                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">Puokštės</h1>
+                    <h1 className="text-7xl font-bold p-1 font-script text-center p-6">Flower Bouquet</h1>
 
                     <CarouselBig items={data3.map((product) => (
                     <ProductItem product={product} key={product.id}></ProductItem>

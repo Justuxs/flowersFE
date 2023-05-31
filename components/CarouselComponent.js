@@ -1,9 +1,23 @@
+import { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ProductItem from "./ProductItem";
 
 const CarouselComponent = ({ items }) => {
-    console.log(items);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSelectedIndex((prevIndex) => {
+                const nextIndex = (prevIndex + 1) % items.length; // Calculate the next index
+                return nextIndex;
+            });
+        }, 3000);
+
+        return () => {
+            clearInterval(interval); // Clear the interval on component unmount
+        };
+    }, [items.length]);
 
     // Get the maximum width and height among all items
     const maxWidth = Math.max(...items.map((item) => item.props.product.width));
@@ -16,10 +30,14 @@ const CarouselComponent = ({ items }) => {
     };
 
     return (
-        <Carousel showThumbs={false} style={carouselStyle}>
+        <Carousel
+            showThumbs={false}
+            style={carouselStyle}
+            selectedItem={selectedIndex}
+            onChange={(index) => setSelectedIndex(index)}
+        >
             {items.map((item) => (
                 <div key={item.key}>
-                    {console.log(item.props.product)}
                     <ProductItem product={item.props.product} />
                 </div>
             ))}

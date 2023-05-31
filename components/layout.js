@@ -50,7 +50,7 @@ export default function Layout({ title, children }) {
                                 <a className="text-lg font-bold">Flowers</a>
                             </Link>
                             <h1 className="text-3xl font-bold p-1 font-script text-center p-5 text-black relative z-10">
-                                Gėlės visur žydi visiems, kurie tik nori jas pamatyti.
+                                Every flower is a soul blossoming in nature.
                             </h1>
                             <div>
                                 <Link legacyBehavior href="/cart">

@@ -55,18 +55,15 @@ export default function ProductScreen({page}) {
                         layout="responsive"
                     ></Image>
                 </div>
-                <div>
-                    <ul>
+                <div >
+                    <ul className="card p-5">
                         <li>
-                            <h1 className="text-lg">{product.name}</h1>
+                            <h1 className="text-3xl font-bold ">{product.name}</h1>
                         </li>
-                        <li>Category: {product.category}</li>
-                        <li>
-                            {product.rating} of  reviews
-                        </li>
-                        <li>Quantity: {product.quantity}</li>
+                        <li className="text-xl  ">Category: {product.category}</li>
+                        <li  className="text-xl  " >Quantity: {product.quantity}</li>
 
-                        <li>Description: {product.description}</li>
+                        <li  className="text-xl  " >Description: {product.description}</li>
                     </ul>
                 </div>
                 <div>
