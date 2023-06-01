@@ -99,8 +99,8 @@ export default function AdminProdcutsScreen() {
   return (
     <Layout title="Admin Products">
       <div className="grid md:grid-cols-4 md:gap-5">
-        <div>
-          <ul>
+        <div >
+          <ul className="card p-4">
             <li>
               <Link href="/admin/dashboard">Dashboard</Link>
             </li>
@@ -141,7 +141,6 @@ export default function AdminProdcutsScreen() {
                     <th className="p-5 text-left">PRICE</th>
                     <th className="p-5 text-left">CATEGORY</th>
                     <th className="p-5 text-left">COUNT</th>
-                    <th className="p-5 text-left">RATING</th>
                     <th className="p-5 text-left">ACTIONS</th>
                   </tr>
                 </thead>
@@ -150,10 +149,9 @@ export default function AdminProdcutsScreen() {
                     <tr key={product._id} className="border-b">
                       <td className=" p-5 ">{product.id}</td>
                       <td className=" p-5 ">{product.name}</td>
-                      <td className=" p-5 ">${product.price}</td>
+                      <td className=" p-5 ">{product.price}€</td>
                       <td className=" p-5 ">{product.category}</td>
                       <td className=" p-5 ">{product.quantity}</td>
-                      <td className=" p-5 ">{product.rating}</td>
                       <td className=" p-5 ">
                         <Link
                           href={`/admin/product/${product.id}`}

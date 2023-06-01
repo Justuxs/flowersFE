@@ -112,7 +112,7 @@ export default function AdminProductCreateScreen() {
         <Layout title={"Create Product"}>
             <div className="grid md:grid-cols-4 md:gap-5">
                 <div>
-                    <ul>
+                    <ul className="card p-4">
                         <li>
                             <Link href="/admin/dashboard">Dashboard</Link>
                         </li>
@@ -195,7 +195,7 @@ export default function AdminProductCreateScreen() {
                                 {loadingUpload && <div>Uploading....</div>}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="category">category</label>
+                                <label htmlFor="category">Category</label>
                                 <input
                                     type="text"
                                     className="w-full"

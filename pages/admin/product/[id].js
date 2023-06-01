@@ -122,9 +122,12 @@ export default function AdminProductEditScreen() {
             dispatch({type: 'UPDATE_SUCCESS'});
             toast.success('Product updated successfully');
             router.push('/admin/products');
+            toast.success('Product deleted successfully');
+
         } catch (err) {
             dispatch({type: 'UPDATE_FAIL', payload: getError(err)});
             toast.error(getError(err));
+            //router.push('/admin/products');
         }
     };
 
@@ -132,7 +135,7 @@ export default function AdminProductEditScreen() {
         <Layout title={`Edit Product ${productId}`}>
             <div className="grid md:grid-cols-4 md:gap-5">
                 <div>
-                    <ul>
+                    <ul className="card p-4">
                         <li>
                             <Link href="/admin/dashboard">Dashboard</Link>
                         </li>
@@ -216,7 +219,7 @@ export default function AdminProductEditScreen() {
                                 {loadingUpload && <div>Uploading....</div>}
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="category">category</label>
+                                <label htmlFor="category">Category</label>
                                 <input
                                     type="text"
                                     className="w-full"
